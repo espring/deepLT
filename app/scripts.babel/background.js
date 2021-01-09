@@ -46,7 +46,7 @@ const translatorOnDeepLSite = (text) => {
 
 
 chrome.contextMenus.create({
-  title: 'Translate with DeepL',
+  title: 'Translate with DeepL.(Command+Shift+6)',
   type: 'normal',
   contexts: ['selection'],
   onclick: (info) => {
@@ -70,4 +70,25 @@ chrome.contextMenus.create({
 // NOTE: default popup.html must be removed from manifest.json
 chrome.browserAction.onClicked.addListener(function(tab) {
 })
+
+chrome.commands.getAll( commands => {
+
+  console.log('get all commands : ', commands)
+} )
+// 
+chrome.commands.onCommand.addListener(function(command, tab) {
+  console.log('command: ', command)
+  if ( command === 'toggle-feature-deeplt' ) {
+    chrome.tabs.sendMessage(tab.id, {method: 'getSelection'}, 
+    function(response){
+      const originalText = response.data
+      if (originalText) {
+        return translatorOnDeepLSite(originalText)
+      } else {
+        console.log('DeepLT requires selected text.')
+      }
+    });
+  }
+
+});
 

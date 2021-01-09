@@ -8,6 +8,15 @@
     "128": "images/deepl-icon.png"
   },
   "default_locale": "en",
+  "commands": {
+    "toggle-feature-deeplt": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+6",
+        "mac": "Command+Shift+6"
+      },
+      "description": "Toggle deepl translator"
+    }
+  },
   "background": {
     "scripts": [
       "libs/polyfill.min.js",
