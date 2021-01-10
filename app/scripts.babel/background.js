@@ -83,6 +83,9 @@ chrome.commands.onCommand.addListener(function(command, tab) {
     function(response){
       const originalText = response.data
       if (originalText) {
+        setTimeout( () => {
+          notify(tab.id, 'EV_DESELECT')
+        }, 1000 )
         return translatorOnDeepLSite(originalText)
       } else {
         console.log('DeepLT requires selected text.')
