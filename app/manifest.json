@@ -25,6 +25,7 @@
     ]
   },
   "permissions": [
+    "activeTab",
     "contextMenus",
     "https://www.deepl.com/jsonrpc",
     "notifications",
@@ -49,8 +50,7 @@
       "19": "images/deepl-icon.png",
       "38": "images/deepl-icon.png"
     },
-    "default_title": "deepLT",
-    "default_popup": "popup.html" 
+    "default_title": "deepLT"
   },
   "content_security_policy": "script-src 'self' 'unsafe-eval' ; object-src 'self'"
 
