@@ -55,7 +55,30 @@ const translatorOnDeepLSite = (text) => {
 
 }
 
+const translateSelected = (tab, openEmpty = false) => {
+  chrome.tabs.sendMessage(tab.id, {method: 'getSelection'}, (response) => {
+    const originalText = response.data
+    if (originalText) {
 
+      preTab = tab
+      // clear 
+      setTimeout( () => {
+        notify(tab.id, 'EV_DESELECT')
+      }, 1000 )
+
+      return translatorOnDeepLSite(originalText)
+    } else {
+
+      if (openEmpty) {
+        // jump to the deepl site even originalText is empty
+        return translatorOnDeepLSite('')
+      }
+      console.log('DeepLT requires selected text.')
+    }
+  });
+}
+
+////////////////////////////////////
 chrome.contextMenus.create({
   title: 'Translate with DeepL.(Command+Shift+6)',
   type: 'normal',
@@ -76,7 +99,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
       return goBack()
     } else {
       preTab = tabs?.[0]
-      return translatorOnDeepLSite('')
+      return translateSelected(tab, true)
     }
   })
 })
@@ -89,21 +112,8 @@ chrome.commands.getAll( commands => {
 chrome.commands.onCommand.addListener(function(command, tab) {
   console.log('command: ', command)
   if ( command === 'toggle-feature-deeplt' ) {
-    chrome.tabs.sendMessage(tab.id, {method: 'getSelection'}, (response) => {
-      const originalText = response.data
-      if (originalText) {
 
-        preTab = tab
-        // clear 
-        setTimeout( () => {
-          notify(tab.id, 'EV_DESELECT')
-        }, 1000 )
-
-        return translatorOnDeepLSite(originalText)
-      } else {
-        console.log('DeepLT requires selected text.')
-      }
-    });
+    return translateSelected(tab)
   } else if ( command === 'toggle-go-back' ) {
 
     return checkTab(preTab?.id)
